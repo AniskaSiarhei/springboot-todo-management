@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/todos")
 @AllArgsConstructor
@@ -32,6 +34,14 @@ public class TodoController {
     public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long todoId) {
         TodoDto todoDto = todoService.getTodo(todoId);
         return new ResponseEntity<>(todoDto, HttpStatus.OK);
+    }
+
+    // Build Get All Todos REST API
+    @GetMapping
+    public ResponseEntity<List<TodoDto>> getAllTodos() {
+        List<TodoDto> allTodos = todoService.getAllTodos();
+//        return new ResponseEntity<>(allTodos, HttpStatus.OK);
+        return ResponseEntity.ok(allTodos); // It's the same
     }
 
 
