@@ -5,6 +5,7 @@ import com.example.todo.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,11 +46,19 @@ public class TodoController {
         return ResponseEntity.ok(allTodos); // It's the same
     }
 
-    // build Update REST API
+    // Build Update Todo REST API
     @PutMapping("{id}")
     public ResponseEntity<TodoDto> updateTodo(@RequestBody TodoDto todoDto, @PathVariable("id") Long todoId) {
         TodoDto updatedTodo = todoService.updateTodo(todoDto, todoId);
         return ResponseEntity.ok(updatedTodo);
+    }
+
+
+    // Build Delete Todo REST API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteTodo(@PathVariable("id") Long todoId) {
+        todoService.deleteTodo(todoId);
+        return ResponseEntity.ok("Todo deleted successfully!");
     }
 
 
