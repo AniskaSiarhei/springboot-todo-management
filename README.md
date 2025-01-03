@@ -6,3 +6,4 @@ Simple Todo Management Project:
 - MySQL Database
 - Maven
 - Lombok
+- Modelmapper
