@@ -2,6 +2,7 @@ package com.example.todo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,6 +27,13 @@ public class SpringSecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> {
+                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
+//                    authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();   // access to all GET requests without authentication
+
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 
@@ -35,7 +43,7 @@ public class SpringSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
 
-        UserDetails serg = User.builder()
+        UserDetails user = User.builder()
                 .username("user")
                 .password(passwordEncoder().encode("password"))
                 .roles("USER")
@@ -47,7 +55,7 @@ public class SpringSecurityConfig {
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(serg, admin);
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
 }
